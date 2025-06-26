@@ -53,6 +53,8 @@ class Client {
                 String move = null;
                 move = console.readLine();
 
+				board.updateBoard(move);
+
 				output.write(move.getBytes(),0,move.length());
 				output.flush();
             }
@@ -105,6 +107,8 @@ class Client {
 			String move = null;
 			move = console.readLine();
 
+			board.updateBoard(move);
+
 			output.write(move.getBytes(),0,move.length());
 			output.flush();
 					
@@ -116,6 +120,8 @@ class Client {
 
 		       	String move = null;
 				move = console.readLine();
+
+				board.updateBoard(move);
 
 				output.write(move.getBytes(),0,move.length());
 				output.flush();
@@ -134,6 +140,8 @@ class Client {
 
 				String move = null;
 				move = console.readLine();
+
+				board.updateBoard(move);
 
 				output.write(move.getBytes(),0,move.length());
 				output.flush();
