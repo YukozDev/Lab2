@@ -4,10 +4,12 @@ import java.util.List;
 public class Board {
 
     private int[][] board;
+    private Move move;
     private List<String> test = new ArrayList<>();
 
     public Board() {
         this.board = new int[8][8];
+        move = new Move(this);
     }
 
     public int[][] getBoard() {
