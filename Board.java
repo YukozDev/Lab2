@@ -8,8 +8,15 @@ public class Board {
         this.board = new int[8][8];
     }
     
-    public int evaluate(){
-
+    public int evaluate(Board board){
+        for(Move m : board.validMoves()) {
+            if(m.y == 1){
+                return -2;
+            }
+            if(m.y == 8){
+                return 2;
+            }
+        }
         return 0; // Placeholder for evaluation logic
     }
 
@@ -37,8 +44,8 @@ public class Board {
         return bestPossibleMoves;
     }
 
-    public ArrayList<Moves> validMoves() {
-        ArrayList<Moves> possibleMoves = new ArrayList<>();
+    public ArrayList<Move> validMoves() {
+        ArrayList<Move> possibleMoves = new ArrayList<>();
 
 
         return possibleMoves;

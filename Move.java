@@ -1,5 +1,5 @@
 import java.util.*;
-public class Moves {
+public class Move {
 
     int y;
     char x;
