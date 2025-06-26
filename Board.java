@@ -9,8 +9,8 @@ public class Board {
     }
     
     public int evaluate(Board board){
-        
-        for(Move m : board.validMoves()) {
+
+        for(Move m : board.validMoves(this)) {
             if(m.y == 1){
                 return -2;
             }
@@ -45,17 +45,17 @@ public class Board {
         return bestPossibleMoves;
     }
 
-    public ArrayList<Move> validMoves() {
+    public ArrayList<Move> validMoves(Board board) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (board[i][j] != 0) { // Assuming non-zero means a piece is present
+                if (this.board[i][j] != 0) { // Assuming non-zero means a piece is present
                     // Check possible moves for the piece at (i, j)
                     // This is a placeholder logic, actual move generation will depend on the game rules
                     Move move = new Move();
                     move.x = (char) ('A' + j); // Convert column index to letter
                     move.y = i + 1; // Convert row index to 1-based index
-                    move.pieceType = board[i][j]; // Store the piece type
+                    move.pieceType = this.board[i][j]; // Store the piece type
                     possibleMoves.add(move);
                 }
             }
