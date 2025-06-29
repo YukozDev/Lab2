@@ -4,8 +4,36 @@ import java.util.List;
 
 public class Board {
 
+    
+
     private int[][] board;
     private List<String> test = new ArrayList<>();
+
+
+    /**
+     * Initializes the board to the standard starting position.
+     * 1 = small black, 2 = big black, 3 = small red, 4 = big red, 0 = empty
+     */
+    public void initializeBoard() {
+        // Clear board
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = 0;
+            }
+        }
+        // Place black pieces (top two rows)
+        for (int j = 0; j < 8; j++) {
+            board[0][j] = 2; // big black
+            board[1][j] = 1; // small black
+        }
+        // Place red pieces (bottom two rows)
+        for (int j = 0; j < 8; j++) {
+            board[6][j] = 3; // small red
+            board[7][j] = 4; // big red
+        }
+    }
+
+
 
     /**
      * Returns a deep copy of this board with the given move applied.
