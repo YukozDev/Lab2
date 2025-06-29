@@ -1,6 +1,11 @@
 import java.util.*;
 
 public class Move {
+
+    /**
+     * Returns the move as a string in the format D6-D5 (fromXfromY-toXtoY)
+     */
+    
     int y;
     char x;
     int toY;
@@ -15,6 +20,11 @@ public class Move {
      */
     public void movePawn(Board board) {
 
+    }
+
+    @Override
+    public String toString() {
+        return "" + x + y + "-" + toX + toY;
     }
 
     public boolean isValidMove(Board board, int fromY, char fromX, int toY, char toX) {
