@@ -11,6 +11,7 @@ public class CPUPlayer {
      * @return ArrayList of best moves
      */
     public ArrayList<Move> getBestMoves(Board board, boolean isBlackTurn) {
+        nodesEvaluated = 0;
         ArrayList<Move> bestMoves = new ArrayList<>();
         int bestScore = isBlackTurn ? Integer.MIN_VALUE : Integer.MAX_VALUE;
         List<Move> moves = new Move().getValidMoves(board);
@@ -29,10 +30,13 @@ public class CPUPlayer {
         return bestMoves;
     }
 
+    
+    
     /**
      * Minimax algorithm for evaluating board states.
      */
     private int minimax(Board board, int depth, boolean isBlackTurn) {
+        nodesEvaluated++; // Count this node
         int eval = evaluate(board);
         if (depth == 0 || eval == 1000 || eval == -1000 || eval == 0 && (isTerminal(board))) {
             return eval;
@@ -55,6 +59,8 @@ public class CPUPlayer {
         }
         return bestScore;
     }
+
+   
 
     /**
      * Helper to check if the board is in a terminal state (no moves for either player).
