@@ -7,8 +7,13 @@ public class Board {
     
 
     private int[][] board;
-    private List<String> test = new ArrayList<>();
+    private ArrayList<Move> valid = new ArrayList<>();
+    private Move move;
 
+    
+    public ArrayList<Move> getValid() {
+        return valid;
+    }
 
     /**
      * Initializes the board to the standard starting position.
@@ -76,6 +81,7 @@ public class Board {
     }
 
     public void updateBoard(String move) {
+        valid = (ArrayList<Move>) new Move().getValidMoves(this);
         System.out.println("DATA RECU : " + move);
         String[] t = move.trim().split(" ");
         System.out.println(t[0]);
