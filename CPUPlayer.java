@@ -1,6 +1,115 @@
 import java.util.*;
 
 public class CPUPlayer {
+        private int maxDepth;
+        private int nodesEvaluated;
+
+    /**
+     * Returns a list of the best moves found by minimax for the current player.
+     * @param board The current board state
+     * @param isBlackTurn True if it's black's turn, false for red
+     * @return ArrayList of best moves
+     */
+    public ArrayList<Move> getBestMoves(Board board, boolean isBlackTurn) {
+        ArrayList<Move> bestMoves = new ArrayList<>();
+        int bestScore = isBlackTurn ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        List<Move> moves = new Move().getValidMoves(board);
+
+        for (Move move : moves) {
+            Board newBoard = board.cloneWithMove(move); // You need to implement this method in Board
+            int score = minimax(newBoard, maxDepth - 1, !isBlackTurn);
+            if ((isBlackTurn && score > bestScore) || (!isBlackTurn && score < bestScore)) {
+                bestScore = score;
+                bestMoves.clear();
+                bestMoves.add(move);
+            } else if (score == bestScore) {
+                bestMoves.add(move);
+            }
+        }
+        return bestMoves;
+    }
+
+    /**
+     * Minimax algorithm for evaluating board states.
+     */
+    private int minimax(Board board, int depth, boolean isBlackTurn) {
+        int eval = evaluate(board);
+        if (depth == 0 || eval == 1000 || eval == -1000 || eval == 0 && (isTerminal(board))) {
+            return eval;
+        }
+
+        List<Move> moves = new Move().getValidMoves(board);
+        if (moves.isEmpty()) {
+            return evaluate(board);
+        }
+
+        int bestScore = isBlackTurn ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        for (Move move : moves) {
+            Board newBoard = board.cloneWithMove(move); // You need to implement this method in Board
+            int score = minimax(newBoard, depth - 1, !isBlackTurn);
+            if (isBlackTurn) {
+                bestScore = Math.max(bestScore, score);
+            } else {
+                bestScore = Math.min(bestScore, score);
+            }
+        }
+        return bestScore;
+    }
+
+    /**
+     * Helper to check if the board is in a terminal state (no moves for either player).
+     */
+    private boolean isTerminal(Board board) {
+        List<Move> moves = new Move().getValidMoves(board);
+        return moves.isEmpty();
+    }
+
+       
+        
+        public CPUPlayer(int depth) {
+            this.maxDepth = depth;
+        }
+
+    /**
+     * Evaluates the board and returns a score if the game is over.
+     * Returns 1000 if black wins, -1000 if red wins, 0 for draw or not over.
+     */
+    public int evaluate(Board board) {
+        int[][] boardState = board.getBoard();
+        boolean hasBlack = false, hasRed = false;
+
+        // Check for red piece at row 1 (top, index 0) and black at row 8 (bottom, index 7)
+        for (int x = 0; x < 8; x++) {
+            if (boardState[0][x] == 3 || boardState[0][x] == 4) {
+                return -1000; // Red wins
+            }
+            if (boardState[7][x] == 1 || boardState[7][x] == 2) {
+                return 1000; // Black wins
+            }
+        }
+
+        // Check if either player has no pieces left
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                int piece = boardState[y][x];
+                if (piece == 1 || piece == 2) hasBlack = true;
+                if (piece == 3 || piece == 4) hasRed = true;
+            }
+        }
+        if (!hasBlack && hasRed) return -1000; // Red wins
+        if (!hasRed && hasBlack) return 1000;  // Black wins
+        if (!hasRed && !hasBlack) return 0;    // Draw
+
+        // Game not over
+        return 0;
+    }
+
+
+
+
+
+     
+
 
 
     
