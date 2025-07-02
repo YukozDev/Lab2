@@ -4,8 +4,68 @@ import java.util.List;
 
 public class Board {
 
+    
+
     private int[][] board;
+<<<<<<< HEAD
     private Move move;
+=======
+    private ArrayList<Move> valid = new ArrayList<>();
+    private Move move;
+
+    
+    public ArrayList<Move> getValid() {
+        return valid;
+    }
+
+    /**
+     * Initializes the board to the standard starting position.
+     * 1 = small black, 2 = big black, 3 = small red, 4 = big red, 0 = empty
+     */
+    public void initializeBoard() {
+        // Clear board
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = 0;
+            }
+        }
+        // Place black pieces (top two rows)
+        for (int j = 0; j < 8; j++) {
+            board[0][j] = 2; // big black
+            board[1][j] = 1; // small black
+        }
+        // Place red pieces (bottom two rows)
+        for (int j = 0; j < 8; j++) {
+            board[6][j] = 3; // small red
+            board[7][j] = 4; // big red
+        }
+    }
+
+
+
+    /**
+     * Returns a deep copy of this board with the given move applied.
+     */
+    public Board cloneWithMove(Move move) {
+        Board newBoard = new Board();
+        int[][] current = this.getBoard();
+        int[][] copy = new int[8][8];
+        for (int i = 0; i < 8; i++) {
+            System.arraycopy(current[i], 0, copy[i], 0, 8);
+        }
+        // Remove piece from original position
+        int fromRow = 8 - move.y;
+        int fromCol = move.x - 'A';
+        int toRow = 8 - move.toY;
+        int toCol = move.toX - 'A';
+        copy[toRow][toCol] = copy[fromRow][fromCol];
+        copy[fromRow][fromCol] = 0;
+        newBoard.board = copy;
+        return newBoard;
+    }
+
+    
+>>>>>>> 67adf45b8be18311777c7863f434ca1a5a0c7c7b
 
     public Board() {
         this.board = new int[8][8];
@@ -59,12 +119,20 @@ public class Board {
      * Permet de mettre a jour le tableau lorsque le Joueur adverse a jouer.
     */ 
     public void updateBoard(String move) {
+<<<<<<< HEAD
         System.out.println("Last Move (Adversaire) : " + move);
         String[] data = move.trim().split(" ");
+=======
+        valid = (ArrayList<Move>) new Move().getValidMoves(this);
+        System.out.println("DATA RECU : " + move);
+        String[] t = move.trim().split(" ");
+        System.out.println(t[0]);
+>>>>>>> 67adf45b8be18311777c7863f434ca1a5a0c7c7b
 
         int oldX = data[0].charAt(0) - 65; // A en ascii c'est 65
         int oldY = data[0].charAt(1) - 49; // 1 en ascii c'est 49
 
+<<<<<<< HEAD
         int newX = data[2].charAt(0) - 65; // A en ascii c'est 65
         int newY = data[2].charAt(1) - 49; // 1 en ascii c'est 49
 
@@ -79,4 +147,12 @@ public class Board {
             System.out.println("INVALIDE BY iSVALIDE MOVE");
         }
     }
+=======
+    
+
+
+
+        
+
+>>>>>>> 67adf45b8be18311777c7863f434ca1a5a0c7c7b
 }
