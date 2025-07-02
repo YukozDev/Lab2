@@ -7,6 +7,16 @@ public class Move {
         this.board = board;
     }
 
+
+    /*
+ * 0 Case vide
+ * 1 Petit pion rouge
+ * 2 Pion rouge
+ * 3 Petit pion noir
+ * 4 Pion noir
+ */
+
+
     /**
      * Permet de verifier si le prochain deplacement sur le plateau est valide
      */
@@ -14,98 +24,103 @@ public class Move {
 
         int currentPawnType = board.getPawn(x, y);
         int target = board.getPawn(nextX, nextY);
+        boolean smallRed = false; 
+        boolean bigRed = false;
+        boolean smallBlack = false;
+        boolean bigBlack = false;
+        boolean hasRedPusher = false;
+        boolean hasBlackPusher = false;
+        boolean redStartingPosition = false;
+        boolean blackStartingPosition = false;
 
-        if(target == -1)
+        if(currentPawnType == 0){
             return false;
-
-        //check small pawn move
-        if(currentPawnType == PawnType.BLACK_SMALL.ordinal() || currentPawnType == PawnType.RED_SMALL.ordinal()) {
-            //Check if behind a small pawn we have a big pawn
-            //Straight - BLACK
-            if(board.getPawn(x, y + 1) == PawnType.BLACK_BIG.ordinal() && currentPawnType == PawnType.BLACK_SMALL.ordinal()) {
-                //Maximum avance 1 case
-                if(target == PawnType.NONE.ordinal() && nextX - x == 0 && nextY - y == -1)
-                    return true;
-            }
-
-            //Straight - RED
-            else if(board.getPawn(x, y - 1) == PawnType.RED_BIG.ordinal() && currentPawnType == PawnType.RED_SMALL.ordinal()) {
-                //Maximum avance 1 case                
-                if(target == PawnType.NONE.ordinal() && nextX - x == 0 && nextY - y == 1)
-                    return true;
-            }
-
-            //Diago Gauche - BLACK
-            if(board.getPawn(x - 1, y + 1) == PawnType.BLACK_BIG.ordinal() && currentPawnType == PawnType.BLACK_SMALL.ordinal()) {
-                //Maximum avance 1 case
-                if(nextX - x != -1 && nextY - y != -1)
-                    return false;
-
-                if(target == PawnType.NONE.ordinal() || target == PawnType.RED_BIG.ordinal() || target == PawnType.RED_SMALL.ordinal())
-                    return true;
-            }
-
-            //Diago Gauche - RED
-            else if(board.getPawn(x - 1, y - 1) == PawnType.RED_BIG.ordinal() && currentPawnType == PawnType.RED_SMALL.ordinal()) {
-                //Maximum avance 1 case
-                if(nextX - x != -1 && nextY - y != 1)
-                    return false;
-
-                if(target == PawnType.NONE.ordinal() || target == PawnType.BLACK_BIG.ordinal() || target == PawnType.BLACK_SMALL.ordinal())
-                    return true;    
-            }
-
-            //Diago Droite - BLACK
-            if(board.getPawn(x + 1, y + 1) == PawnType.BLACK_BIG.ordinal() && currentPawnType == PawnType.BLACK_SMALL.ordinal()) {
-                //Maximum avance 1 case
-                if(nextX - x != 1 && nextY - y != -1)
-                    return false;
-
-                if(target == PawnType.NONE.ordinal() || target == PawnType.RED_BIG.ordinal() || target == PawnType.RED_SMALL.ordinal())
-                    return true;          
-            }
-
-            //Diago Droite - RED
-            else if(board.getPawn(x + 1, y - 1) == PawnType.RED_BIG.ordinal() && currentPawnType == PawnType.RED_SMALL.ordinal()) {
-                //Maximum avance 1 case
-                if(nextX - x != 1 && nextY - y != 1)
-                    return false;
-
-                if(target == PawnType.NONE.ordinal() || target == PawnType.BLACK_BIG.ordinal() || target == PawnType.BLACK_SMALL.ordinal())
-                    return true;                    
-            }
         }
 
-        //check big pawn move
-        if(currentPawnType == PawnType.BLACK_BIG.ordinal() || currentPawnType == PawnType.RED_BIG.ordinal()) {
-
-            if(target == PawnType.NONE.ordinal()) {
-                // Diago left | Straight | Diago right
-                if(currentPawnType == PawnType.BLACK_BIG.ordinal()) {
-                    if((nextX - x == -1 && nextY - y == -1) || (nextX - x == 0 && nextY - y == -1) || (nextX - x == 1 && nextY - y == -1))
-                        return true;
-                }
-                else {
-                    if((nextX - x == -1 && nextY - y == 1) || (nextX - x == 0 && nextY - y == 1) || (nextX - x == 1 && nextY - y == 1))
-                        return true;                    
-                }
-            }
-
-            // Capture RED
-            else if(currentPawnType == PawnType.RED_BIG.ordinal() && (target == PawnType.BLACK_BIG.ordinal() || target == PawnType.BLACK_SMALL.ordinal())) {
-                // Diago Gauche | Diago Droite
-                if((nextX - x == -1 && nextY - y == 1) || (nextX - x == 1 && nextY - y == 1))
-                    return true;
-            }
-
-            else if(currentPawnType == PawnType.BLACK_BIG.ordinal() && (target == PawnType.RED_BIG.ordinal() || target == PawnType.RED_SMALL.ordinal())) {
-                // Diago Gauche | Diago Droite
-                if((nextX - x == -1 && nextY - y == -1) || (nextX - x == 1 && nextY - y == -1))
-                    return true;
-            }
+        if(currentPawnType == 1){
+            smallRed = true;
+        }
+        if(currentPawnType == 2){
+            bigRed = true;
+        }
+        if(currentPawnType == 3){
+            smallBlack = true;
+        }
+        if(currentPawnType == 4){
+            bigBlack = true;
         }
 
-        return false;
+
+        //Déterminer si les pions sont dans leur position de départ
+        if (smallRed == true && y == 1){
+            redStartingPosition = true;
+        }
+         if (smallBlack == true && y == 7){
+            blackStartingPosition = true;
+        }
+
+
+        //Pion rouge sans pusher
+        if (smallRed == true && board.getPawn(x - 1, y -1) != 2 && board.getPawn(x + 1, y -1) != 2 && board.getPawn(x, y - 1) != 2) {
+            return false;
+        } else {
+            hasRedPusher = true;
+
+        }
+        //Pion noir sans pusher
+        if (smallBlack == true && board.getPawn(x - 1, y + 1) != 4 && board.getPawn(x + 1, y + 1) != 4 && board.getPawn(x, y + 1) != 4) {
+            return false;
+        } else {
+            hasBlackPusher = true;
+        }
+        //Petit Rouge tente une capture non diagonale
+        if(smallRed == true && hasRedPusher == true && (target == 3 || target == 4) && nextX == x && nextY == y + 1) {
+            return false;
+            }
+        //Petit Noir tente une capture non diagonale
+        if(smallBlack == true && hasBlackPusher == true && (target == 1 || target == 2) && nextX == x && nextY == y - 1) {
+            return false;
+            }
+        //Grand Rouge tente une capture non diagonale
+         if(bigRed == true && (target == 3 || target == 4) && nextX == x && nextY == y + 1) {
+            return false;
+            }
+        //Grand Noir tente une capture non diagonale                
+            if(bigBlack == true && (target == 1 || target == 2) && nextX == x && nextY == y - 1) {
+            return false;
+            }
+        //Petit rouge a un pusher mais n'est pas dans sa position de départ et tente un mouvement ne correspondant pas à la position de son pusher
+        if(redStartingPosition == false && smallRed == true && hasRedPusher == true && board.getPawn(x,y-1) == 2 && nextX != x){
+            return false;
+        }
+         if(redStartingPosition == false && smallRed == true && hasRedPusher == true && board.getPawn(x-1,y-1) == 2 && nextX != x+1){
+            return false;
+        }
+         if(redStartingPosition == false && smallRed == true && hasRedPusher == true && board.getPawn(x+1,y-1) == 2 && nextX != x-1){
+            return false;
+        }
+        //Petit noir a un pusher mais n'est pas dans sa position de départ et tente un mouvement ne correspondant pas à la position de son pusher
+        if(blackStartingPosition == false && smallBlack == true && hasBlackPusher == true && board.getPawn(x,y+1) == 2 && nextX != x){
+            return false;
+        }
+         if(blackStartingPosition == false && smallBlack == true && hasBlackPusher == true && board.getPawn(x-1,y+1) == 2 && nextX != x+1){
+            return false;
+        }
+         if(blackStartingPosition == false && smallBlack == true && hasBlackPusher == true && board.getPawn(x+1,y+1) == 2 && nextX != x-1){
+            return false;
+        }
+        
+        //N'importe quel déplacement de plus de 1 case    
+        if(Math.abs(nextX - x) > 1 || Math.abs(nextY - y) > 1){
+            return false;
+        }
+
+        
+        
+
+
+
+    return true;
     }
 
     /**
