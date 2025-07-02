@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 
 class Client {
@@ -90,28 +91,29 @@ class Client {
 			// Le serveur demande le prochain coup
 			// Le message contient aussi le dernier coup joue.
 			if(cmd == '3') {
-			byte[] aBuffer = new byte[16];
-					
-			int size = input.available();
-			System.out.println("size :" + size);
+				CPUPlayer cpuPlayer = new CPUPlayer(PawnColor.BLACK);
 
-			input.read(aBuffer,0,size);
-					
-			String s = new String(aBuffer);
-			System.out.println("Dernier coup :" + s);
+				byte[] aBuffer = new byte[16];
+						
+				int size = input.available();
+				System.out.println("size :" + size);
 
-			board.updateBoard(s);
+				input.read(aBuffer,0,size);
+						
+				String s = new String(aBuffer);
+				System.out.println("Dernier coup :" + s);
 
-			System.out.println("Entrez votre coup : ");
+				board.updateBoard(s);
+				//board.getMove().getAllMoves(PawnColor.RED);
 
-			String move = null;
-			move = console.readLine();
+				System.out.println("Entrez votre coup : ");
+				String move = cpuPlayer.getBestMove(board, 3);
+				//move = console.readLine();
 
-			board.updateBoard(move);
+				board.updateBoard(move);
 
-			output.write(move.getBytes(),0,move.length());
-			output.flush();
-					
+				output.write(move.getBytes(),0,move.length());
+				output.flush();
 			}
 
 			// Le dernier coup est invalide
